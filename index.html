@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicativo de Diário</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="theme-selector">
+        <p>Escolha o tema:</p>
+        <button class="theme-btn" onclick="changeTheme('light')" style="background-color: #f4f4f4;">Claro</button>
+        <button class="theme-btn" onclick="changeTheme('dark')" style="background-color: #333;">Escuro</button>
+        <button class="theme-btn" onclick="changeTheme('blue')" style="background-color: #2196F3;">Azul</button>
+        <button class="theme-btn" onclick="changeTheme('green')" style="background-color: #4CAF50;">Verde</button>
+    </div>
+    <div class="container">
+        <h1>Meu Diário</h1>
+        <div class="entry-form">
+            <textarea id="entry" placeholder="Escreva sua entrada aqui..."></textarea>
+            <button onclick="addEntry()">Adicionar Entrada</button>
+        </div>
+        <div class="entries" id="entries"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
