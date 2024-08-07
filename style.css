@@ -73,6 +73,10 @@ h1 {
     color: var(--text-color);
 }
 
+input[type="file"] {
+    margin-bottom: 10px;
+}
+
 button {
     padding: 10px 20px;
     border: none;
@@ -117,6 +121,15 @@ button:hover {
     margin-top: 10px;
     font-size: 1.1rem;
     color: var(--text-color);
+}
+
+.entry-image {
+    margin-top: 10px;
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
 }
 
 .delete-btn {

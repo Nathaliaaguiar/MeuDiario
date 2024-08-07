@@ -5,22 +5,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function addEntry() {
     const entryText = document.getElementById('entry').value;
+    const entryImage = document.getElementById('image').files[0];
+
     if (entryText.trim() === '') {
         alert('Por favor, escreva uma entrada.');
         return;
     }
 
-    const entry = {
-        text: entryText,
-        date: new Date().toLocaleString()
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const entry = {
+            text: entryText,
+            date: new Date().toLocaleString(),
+            image: event.target.result
+        };
+
+        let entries = JSON.parse(localStorage.getItem('entries')) || [];
+        entries.push(entry);
+        localStorage.setItem('entries', JSON.stringify(entries));
+        document.getElementById('entry').value = '';
+        document.getElementById('image').value = '';
+
+        renderEntries(entries);
     };
 
-    let entries = JSON.parse(localStorage.getItem('entries')) || [];
-    entries.push(entry);
-    localStorage.setItem('entries', JSON.stringify(entries));
-    document.getElementById('entry').value = '';
+    if (entryImage) {
+        reader.readAsDataURL(entryImage);
+    } else {
+        const entry = {
+            text: entryText,
+            date: new Date().toLocaleString(),
+            image: null
+        };
 
-    renderEntries(entries);
+        let entries = JSON.parse(localStorage.getItem('entries')) || [];
+        entries.push(entry);
+        localStorage.setItem('entries', JSON.stringify(entries));
+        document.getElementById('entry').value = '';
+
+        renderEntries(entries);
+    }
 }
 
 function loadEntries() {
@@ -31,25 +55,32 @@ function loadEntries() {
 function renderEntries(entries) {
     const entriesContainer = document.getElementById('entries');
     entriesContainer.innerHTML = '';
+
     entries.forEach((entry, index) => {
         const entryDiv = document.createElement('div');
-        entryDiv.className = 'entry';
+        entryDiv.classList.add('entry');
 
-        const entryDate = document.createElement('div');
-        entryDate.className = 'entry-date';
-        entryDate.innerText = entry.date;
+        const dateP = document.createElement('p');
+        dateP.classList.add('entry-date');
+        dateP.textContent = entry.date;
+        entryDiv.appendChild(dateP);
 
-        const entryText = document.createElement('div');
-        entryText.className = 'entry-text';
-        entryText.innerText = entry.text;
+        const textP = document.createElement('p');
+        textP.classList.add('entry-text');
+        textP.textContent = entry.text;
+        entryDiv.appendChild(textP);
+
+        if (entry.image) {
+            const img = document.createElement('img');
+            img.classList.add('entry-image');
+            img.src = entry.image;
+            entryDiv.appendChild(img);
+        }
 
         const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'delete-btn';
+        deleteBtn.classList.add('delete-btn');
         deleteBtn.innerHTML = '&times;';
         deleteBtn.onclick = () => deleteEntry(index);
-
-        entryDiv.appendChild(entryDate);
-        entryDiv.appendChild(entryText);
         entryDiv.appendChild(deleteBtn);
 
         entriesContainer.appendChild(entryDiv);
@@ -71,5 +102,4 @@ function changeTheme(theme) {
 function loadTheme() {
     const theme = localStorage.getItem('theme') || 'light';
     document.body.className = theme;
-    document.getElementById('theme').value = theme;
 }
